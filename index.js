@@ -32,7 +32,10 @@ async function run() {
 
     // popularClasses Apis
     app.get("/popular-classes", async (req, res) => {
-      const result = await popuplarClassesCollection.find().toArray();
+      const result = await popuplarClassesCollection
+        .find()
+        .sort({ Students: -1 })
+        .toArray();
       res.send(result);
     });
 
