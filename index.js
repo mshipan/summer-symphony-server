@@ -29,6 +29,9 @@ async function run() {
     const popuplarClassesCollection = client
       .db("summerDB")
       .collection("popuplarClasses");
+    const popuplarInstructorsCollection = client
+      .db("summerDB")
+      .collection("popularInstructors");
 
     // popularClasses Apis
     app.get("/popular-classes", async (req, res) => {
@@ -36,6 +39,11 @@ async function run() {
         .find()
         .sort({ Students: -1 })
         .toArray();
+      res.send(result);
+    });
+    // popularInstructors Apis
+    app.get("/popular-instructors", async (req, res) => {
+      const result = await popuplarInstructorsCollection.find().toArray();
       res.send(result);
     });
 
