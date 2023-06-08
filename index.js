@@ -43,7 +43,10 @@ async function run() {
     });
     // popularInstructors Apis
     app.get("/popular-instructors", async (req, res) => {
-      const result = await popuplarInstructorsCollection.find().toArray();
+      const result = await popuplarInstructorsCollection
+        .find()
+        .sort({ Students: -1 })
+        .toArray();
       res.send(result);
     });
 
