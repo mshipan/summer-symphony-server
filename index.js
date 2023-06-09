@@ -32,8 +32,11 @@ async function run() {
     const popuplarInstructorsCollection = client
       .db("summerDB")
       .collection("popularInstructors");
+    const selectClassCollection = client
+      .db("summerDB")
+      .collection("selectClass");
 
-    // popularClasses Apis
+    // Classes Apis
     app.get("/classes", async (req, res) => {
       const result = await popuplarClassesCollection
         .find()
@@ -41,12 +44,30 @@ async function run() {
         .toArray();
       res.send(result);
     });
-    // popularInstructors Apis
+    // Instructors Apis
     app.get("/instructors", async (req, res) => {
       const result = await popuplarInstructorsCollection
         .find()
         .sort({ Students: -1 })
         .toArray();
+      res.send(result);
+    });
+
+    // selectClass apis
+    app.get("/selectClass", async (req, res) => {
+      const email = req.query.email;
+      console.log(email);
+      if (!email) {
+        res.send([]);
+      }
+      const query = { email: email };
+      const result = await selectClassCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/selectClass", async (req, res) => {
+      const item = req.body;
+      const result = await selectClassCollection.insertOne(item);
       res.send(result);
     });
 
