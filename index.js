@@ -34,7 +34,7 @@ async function run() {
       .collection("popularInstructors");
 
     // popularClasses Apis
-    app.get("/popular-classes", async (req, res) => {
+    app.get("/classes", async (req, res) => {
       const result = await popuplarClassesCollection
         .find()
         .sort({ Students: -1 })
@@ -42,7 +42,7 @@ async function run() {
       res.send(result);
     });
     // popularInstructors Apis
-    app.get("/popular-instructors", async (req, res) => {
+    app.get("/instructors", async (req, res) => {
       const result = await popuplarInstructorsCollection
         .find()
         .sort({ Students: -1 })
