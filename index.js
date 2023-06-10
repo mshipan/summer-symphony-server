@@ -26,6 +26,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const usersCollection = client.db("summerDB").collection("users");
     const popuplarClassesCollection = client
       .db("summerDB")
       .collection("popuplarClasses");
@@ -35,6 +36,13 @@ async function run() {
     const selectClassCollection = client
       .db("summerDB")
       .collection("selectClass");
+
+    // users Apis
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
 
     // Classes Apis
     app.get("/classes", async (req, res) => {
