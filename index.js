@@ -125,6 +125,8 @@ async function run() {
 
     app.post("/classes", verifyJWT, async (req, res) => {
       const newClass = req.body;
+      newClass.status = "Pending";
+      newClass.students = 0;
       const result = await popuplarClassesCollection.insertOne(newClass);
       res.send(result);
     });
