@@ -84,6 +84,22 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/users/:email", verifyJWT, async (req, res) => {
+      const email = req.params.email;
+      if (req.decoded.email !== email) {
+        res.send({ role: null });
+        return;
+      }
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      const role = user?.role;
+      const isAdmin = role === "Admin";
+      const isInstructor = role === "Instructor";
+      const isStudent = role === "Student";
+      const result = { isAdmin, isInstructor, isStudent };
+      res.send(result);
+    });
+
     app.patch("/users/:id", async (req, res) => {
       const id = req.params.id;
       const { role } = req.body;
