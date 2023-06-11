@@ -122,6 +122,13 @@ async function run() {
         .toArray();
       res.send(result);
     });
+
+    app.post("/classes", verifyJWT, async (req, res) => {
+      const newClass = req.body;
+      const result = await popuplarClassesCollection.insertOne(newClass);
+      res.send(result);
+    });
+
     // Instructors Apis
     app.get("/instructors", async (req, res) => {
       const result = await popuplarInstructorsCollection
