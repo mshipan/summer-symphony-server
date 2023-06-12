@@ -57,6 +57,7 @@ async function run() {
     const selectClassCollection = client
       .db("summerDB")
       .collection("selectClass");
+    const paymentCollection = client.db("summerDB").collection("payment");
 
     // jwt
     app.post("/jwt", (req, res) => {
@@ -183,6 +184,25 @@ async function run() {
       res.send({
         clientSecret: paymentIntent.client_secret,
       });
+    });
+    //payments api
+    app.get("/payments", verifyJWT, async (req, res) => {
+      const result = await paymentCollection
+        .find()
+        .sort({ date: -1 })
+        .toArray();
+      res.send(result);
+    });
+
+    app.post("/payments", verifyJWT, async (req, res) => {
+      const payment = req.body;
+      const newResult = await paymentCollection.insertOne(payment);
+      const query = {
+        _id: { $in: payment.classId.map((id) => new ObjectId(id)) },
+      };
+
+      const deleteResult = await selectClassCollection.deleteOne(query);
+      res.send({ newResult, deleteResult });
     });
 
     // Send a ping to confirm a successful connection
