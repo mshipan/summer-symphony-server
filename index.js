@@ -133,6 +133,23 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/classes/:id", async (req, res) => {
+      const id = req.params.id;
+      const { status } = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          status: status,
+        },
+      };
+
+      const result = await popuplarClassesCollection.updateOne(
+        filter,
+        updateDoc
+      );
+      res.send(result);
+    });
+
     // Instructors Apis
     app.get("/instructors", async (req, res) => {
       const result = await popuplarInstructorsCollection
